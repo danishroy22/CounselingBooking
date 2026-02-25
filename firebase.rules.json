@@ -1,0 +1,29 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "counseling_bookings": {
+      ".read": "auth != null",
+      "$bookingId": {
+        ".write": "auth != null && (!data.exists() || data.child('created_by').val() == auth.uid || root.child('users').child(auth.uid).child('role').val() == 'admin')",
+        ".validate": "newData.hasChildren(['date','time','student_name','student_id','status']) && newData.child('date').isString() && newData.child('time').isString() && newData.child('student_name').isString() && newData.child('student_id').isString() && newData.child('status').isString() && newData.child('date').val().matches(/^\\d{4}-\\d{2}-\\d{2}$/) && newData.child('student_name').val().length >= 2 && newData.child('student_name').val().length <= 100 && newData.child('student_id').val().length >= 1 && newData.child('student_id').val().length <= 50"
+      },
+      ".indexOn": ["date", "created_by", "status"]
+    },
+    "users": {
+      ".read": "auth != null",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('users').child(auth.uid).child('role').val() == 'admin')",
+        ".write": "auth != null && auth.uid == $uid && (!data.exists() || data.child('email').val() == newData.child('email').val())",
+        "role": {
+          ".write": "false",
+          ".validate": "newData.isString() && (newData.val() == 'admin' || newData.val() == 'student')"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+\\.[^@]+$/)"
+        }
+      },
+      ".indexOn": ["email", "role"]
+    }
+  }
+}

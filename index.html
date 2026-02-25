@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counseling Session Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-logos">
+    <img src="assets/logo-left.png" alt="UoM" class="header-logo">
+    <img src="assets/su logo prososal 3.png" alt="SU" class="header-logo">
+  </div>
+  <div class="header-title">Counseling Session Booking</div>
+  <div class="header-logos">
+    <img src="assets/psychology.png" alt="Psychology Society" class="header-logo">
+    <img src="assets/befrienders logo.png" alt="Befrienders" class="header-logo">
+  </div>
+</header>
+
+<div class="container">
+  <div id="authStatus" class="auth-status">
+    <span id="userEmail" class="user-email"></span>
+    <a href="dashboard/dashboard.html" id="adminDashboardBtn" class="auth-btn admin-btn">Admin Dashboard</a>
+    <a href="login.html" id="loginBtn" class="auth-btn login-btn">Login</a>
+    <button id="logoutBtn" class="auth-btn logout-btn">Logout</button>
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Book a Counseling Session</h1>
+      <p>Schedule your psychology and counseling session at the University of Mauritius. Sessions are available on Tuesdays and Fridays.</p>
+      <div class="hero-ctas">
+        <a href="#calendar" class="btn primary">View Available Sessions</a>
+        <a href="#info" class="btn secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="container" id="calendar">
+  <div class="calendar-nav">
+    <button id="prevWeek">◀ Previous Week</button>
+    <div id="weekLabel"></div>
+    <button id="nextWeek">Next Week ▶</button>
+  </div>
+
+  <div class="calendar" id="calendar"></div>
+</div>
+
+<div class="container" id="info">
+  <div class="rules-card">
+    <div class="rules-header">
+      <h3>About Counseling Sessions</h3>
+    </div>
+    <div class="rules-content">
+      <h4>How to Book a Session</h4>
+      <ul>
+        <li>Browse available time slots for Tuesday or Friday</li>
+        <li>Click on an available slot to book your session</li>
+        <li>Complete the booking form with your details</li>
+        <li>Your booking will be confirmed immediately</li>
+      </ul>
+
+      <h4>Session Information</h4>
+      <ul>
+        <li>Sessions are available on Tuesdays and Fridays</li>
+        <li>Each session duration varies by time slot</li>
+        <li>To cancel or reschedule, please contact the counseling office</li>
+        <li>All information shared is kept strictly confidential</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal" id="bookingModal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Reserve Your Session</h2>
+    <div id="bookingDetails" class="booking-details"></div>
+    <form id="bookingForm">
+      <input type="hidden" id="bookingDate" name="bookingDate">
+      <input type="hidden" id="bookingTime" name="bookingTime">
+      
+      <div class="form-group">
+        <label for="studentName">Full Name *</label>
+        <input type="text" id="studentName" name="studentName" required placeholder="Enter your full name">
+      </div>
+
+      <div class="form-group">
+        <label for="studentId">Student ID *</label>
+        <input type="text" id="studentId" name="studentId" required placeholder="Enter your student ID">
+      </div>
+
+      <div class="form-group">
+        <label for="reason">Reason for Session (Optional)</label>
+        <textarea id="reason" name="reason" rows="4" placeholder="You may share any concerns or topics you'd like to discuss during your session"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" id="submitBookingBtn" class="btn primary">Confirm Booking</button>
+        <button type="button" id="cancelBtn" class="btn secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  // Load configuration
+  try {
+    await import('./config/env-config.js');
+    console.log('[Index] Configuration loaded successfully');
+  } catch (error) {
+    console.error('[Index] Failed to load configuration:', error);
+    throw new Error('Configuration file not found. Please configure your Firebase credentials.');
+  }
+  
+  // Wait for config to be ready
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  // Load main script
+  await import('./script.js');
+</script>
+
+</body>
+</html>

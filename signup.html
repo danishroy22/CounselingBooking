@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - Counseling Booking</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="header-logos">
+    <img src="assets/logo-left.png" alt="UoM" class="header-logo">
+    <img src="assets/psychology.png" alt="Psychology Society" class="header-logo">
+  </div>
+  <div class="header-title">Create account</div>
+  <div class="header-logos">
+    <img src="assets/su logo prososal 3.png" alt="SU" class="header-logo">
+    <img src="assets/befrienders logo.png" alt="Befrienders" class="header-logo">
+  </div>
+</header>
+<div class="container" style="max-width:520px;">
+  <div class="auth-card">
+    <div class="auth-header"><h3>Create your account</h3></div>
+    <div class="rules-content">
+      <label>Full Name</label>
+      <input type="text" id="suName" placeholder="Enter your full name" required>
+      <label>Student ID</label>
+      <input type="text" id="suStudentId" placeholder="Enter your student ID" required>
+      <label>Email</label>
+      <input type="email" id="suEmail" placeholder="your.name@umail.uom.ac.mu" required>
+      <label>Password</label>
+      <input type="password" id="suPassword" placeholder="Create a password (min 6 characters)" required minlength="6">
+      <div class="auth-actions" style="margin-top:1rem;">
+        <button id="signupBtn" class="btn primary">Create account</button>
+      </div>
+      <div id="signupError" style="color:#ffb4b4; margin-top:.5rem;"></div>
+      <div class="hint">
+        <a href="login.html" style="color:#e6eef8;">Already have an account? Login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  try {
+    await import('./config/env-config.js');
+    console.log('[Signup] Configuration loaded successfully');
+  } catch (error) {
+    console.error('[Signup] Failed to load configuration:', error);
+    throw new Error('Configuration file not found. Please configure your Firebase credentials.');
+  }
+  
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  const { getAuthInstance, getDb } = await import('./firebase.js');
+  const { createUserWithEmailAndPassword } = await import('./firebase.js');
+  const { ref, set } = await import('https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js');
+  
+  const auth = await getAuthInstance();
+  const db = await getDb();
+
+  const nameEl = document.getElementById('suName');
+  const studentIdEl = document.getElementById('suStudentId');
+  const emailEl = document.getElementById('suEmail');
+  const passEl = document.getElementById('suPassword');
+  const btn = document.getElementById('signupBtn');
+  const err = document.getElementById('signupError');
+
+  btn.onclick = async () => {
+    err.textContent = '';
+    btn.disabled = true; 
+    btn.textContent = 'Creating...';
+
+    try {
+      const email = (emailEl.value || '').trim().toLowerCase();
+      const allowedDomains = ['umail.uom.ac.mu', 'uom.ac.mu'];
+      const domain = email.split('@')[1] || '';
+      if (!allowedDomains.includes(domain)) {
+        throw new Error('Email domain not allowed. Please use your UoM email.');
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(auth, emailEl.value, passEl.value);
+      const user = userCredential.user;
+
+      const userRef = ref(db, `users/${user.uid}`);
+      await set(userRef, {
+        name: nameEl.value.trim(),
+        studentId: studentIdEl.value.trim(),
+        email: emailEl.value.trim(),
+        createdAt: new Date().toISOString(),
+        role: (window.ADMIN_EMAILS || '').split(',').includes(email) ? 'admin' : 'student'
+      });
+
+      alert('Account created successfully! Redirecting...');
+      window.location.href = 'index.html';
+    } catch (e) {
+      console.error('Signup error:', e);
+      err.textContent = e.message || 'Sign up failed. Please check all fields and try again.';
+    } finally {
+      btn.disabled = false; 
+      btn.textContent = 'Create account';
+    }
+  };
+</script>
+</body>
+</html>

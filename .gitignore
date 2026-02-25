@@ -1,0 +1,22 @@
+# Environment configuration with sensitive credentials
+config/env-config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# Node modules (if any)
+node_modules/

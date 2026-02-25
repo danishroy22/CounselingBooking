@@ -1,0 +1,11 @@
+{
+  "name": "counseling-booking",
+  "version": "1.0.0",
+  "description": "Counseling Session Booking System",
+  "scripts": {
+    "build": "node build-config.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -2,6 +2,7 @@
 
 [build]
   publish = "."
+  command = "npm run build"
 
 # Secrets scanning configuration
 # Exclude example/template files from secrets scanning

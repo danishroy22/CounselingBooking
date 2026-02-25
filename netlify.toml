@@ -1,0 +1,12 @@
+# Netlify Configuration
+
+[build]
+  publish = "."
+
+# Secrets scanning configuration
+# Exclude example/template files from secrets scanning
+[build.environment]
+  SECRETS_SCAN_OMIT_PATHS = "config/env-config.example.js,.env.example"
+
+# Or disable secrets scanning for example files
+# SECRETS_SCAN_ENABLED = "false"  # Uncomment to disable entirely (not recommended)

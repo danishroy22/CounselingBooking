@@ -18,8 +18,16 @@ A simplified booking system for psychology/counseling sessions at the University
 
 ### 2. Setup
 
+**Option A: Using .env file (Recommended)**
+1. Copy `.env.example` to `.env`
+2. Fill in your Firebase credentials in `.env`
+3. Copy the values from `.env` to `config/env-config.js` (update the JavaScript object)
+
+**Option B: Direct configuration**
 1. Copy `config/env-config.example.js` to `config/env-config.js`
-2. Configure Firebase credentials in `config/env-config.js`
+2. Configure Firebase credentials directly in `config/env-config.js`
+
+**Then:**
 3. Set up Firebase Realtime Database rules (see `firebase.rules.json`)
 4. Open `index.html` in your browser
 

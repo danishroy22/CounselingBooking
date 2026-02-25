@@ -5,7 +5,7 @@
 const developmentConfig = {
   FIREBASE_API_KEY: "YOUR_FIREBASE_API_KEY",
   FIREBASE_AUTH_DOMAIN: "YOUR_PROJECT.firebaseapp.com",
-  FIREBASE_DATABASE_URL: "https://psychologybooking-default-rtdb.firebaseio.com",
+  FIREBASE_DATABASE_URL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
   FIREBASE_PROJECT_ID: "YOUR_PROJECT_ID",
   FIREBASE_STORAGE_BUCKET: "YOUR_PROJECT.appspot.com",
   FIREBASE_MESSAGING_SENDER_ID: "YOUR_SENDER_ID",

@@ -5,9 +5,10 @@
   command = "npm run build"
 
 # Secrets scanning configuration
-# Exclude example/template files from secrets scanning
+# Exclude example/template files and generated config from secrets scanning
+# The generated config/env-config.js contains secrets but is necessary for the app to function
 [build.environment]
-  SECRETS_SCAN_OMIT_PATHS = "config/env-config.example.js,.env.example"
+  SECRETS_SCAN_OMIT_PATHS = "config/env-config.example.js,.env.example,config/env-config.js,NETLIFY_SETUP.md"
 
 # Or disable secrets scanning for example files
 # SECRETS_SCAN_ENABLED = "false"  # Uncomment to disable entirely (not recommended)

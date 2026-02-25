@@ -15,16 +15,18 @@ Since `config/env-config.js` is gitignored (for security), you need to configure
    - Add the following variables:
 
    ```
-   FIREBASE_API_KEY=AIzaSyAYY110F-kNbufn_TuHmLYoQk6-phzZ484
-   FIREBASE_AUTH_DOMAIN=psychologybooking.firebaseapp.com
-   FIREBASE_DATABASE_URL=https://psychologybooking-default-rtdb.firebaseio.com
-   FIREBASE_PROJECT_ID=psychologybooking
-   FIREBASE_STORAGE_BUCKET=psychologybooking.firebasestorage.app
-   FIREBASE_MESSAGING_SENDER_ID=433493064810
-   FIREBASE_APP_ID=1:433493064810:web:37b81b43d4da27de8bde13
-   FIREBASE_MEASUREMENT_ID=G-6VGELSMRTY
-   ADMIN_EMAILS=admin@umail.uom.ac.mu,counselor@umail.uom.ac.mu,adminpsy@uom.ac.mu
+   FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
+   FIREBASE_AUTH_DOMAIN=YOUR_PROJECT.firebaseapp.com
+   FIREBASE_DATABASE_URL=https://YOUR_PROJECT-default-rtdb.firebaseio.com
+   FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+   FIREBASE_STORAGE_BUCKET=YOUR_PROJECT.firebasestorage.app
+   FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
+   FIREBASE_APP_ID=YOUR_APP_ID
+   FIREBASE_MEASUREMENT_ID=YOUR_MEASUREMENT_ID
+   ADMIN_EMAILS=admin@umail.uom.ac.mu,admin2@umail.uom.ac.mu
    ```
+   
+   **Note:** Replace all `YOUR_*` placeholders with your actual Firebase credentials from your Firebase project settings.
 
 3. **Redeploy**
    - After adding environment variables, trigger a new deploy

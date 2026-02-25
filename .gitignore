@@ -2,6 +2,9 @@
 config/env-config.js
 .env
 
+# Generated files (created during build)
+# Note: config/env-config.js is generated during Netlify build from environment variables
+
 # OS files
 .DS_Store
 Thumbs.db

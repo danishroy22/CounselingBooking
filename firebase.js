@@ -166,12 +166,31 @@ export async function isAdmin(uid) {
   if (!uid) return false;
   
   try {
+    const authentication = await getAuthInstance();
+    const currentUser = authentication.currentUser;
+    
+    // First check: Check user's email against admin emails list (fallback)
+    if (currentUser && currentUser.email) {
+      const adminEmails = securityConfig.adminEmails.map(e => e.toLowerCase().trim());
+      const userEmail = currentUser.email.toLowerCase().trim();
+      if (adminEmails.includes(userEmail)) {
+        console.log('[isAdmin] User is admin by email:', userEmail);
+        return true;
+      }
+    }
+    
+    // Second check: Check database role
     const database = await getDb();
     const userSnap = await get(child(ref(database), `users/${uid}`));
-    if (!userSnap.exists()) return false;
+    if (userSnap.exists()) {
+      const userData = userSnap.val();
+      if (userData.role === 'admin') {
+        console.log('[isAdmin] User is admin by role');
+        return true;
+      }
+    }
     
-    const userData = userSnap.val();
-    return userData.role === 'admin';
+    return false;
   } catch (error) {
     console.error('[isAdmin] Error checking admin status:', error);
     return false;

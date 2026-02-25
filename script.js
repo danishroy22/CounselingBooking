@@ -238,6 +238,19 @@ async function init() {
       const admin = await isAdmin(user.uid);
       if (admin) {
         adminBtn.style.display = "inline-block";
+        // Auto-redirect admins to dashboard when on main page
+        const currentPath = window.location.pathname.toLowerCase();
+        const isMainPage = currentPath.endsWith('index.html') || 
+                          currentPath.endsWith('/') || 
+                          currentPath === '/' ||
+                          currentPath.includes('index.html');
+        
+        if (isMainPage) {
+          // Small delay to ensure UI updates
+          setTimeout(() => {
+            window.location.href = 'dashboard/dashboard.html';
+          }, 100);
+        }
       } else {
         adminBtn.style.display = "none";
       }

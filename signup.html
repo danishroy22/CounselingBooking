@@ -83,16 +83,28 @@
       const user = userCredential.user;
 
       const userRef = ref(db, `users/${user.uid}`);
+      const adminEmails = (window.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
+      const isAdmin = adminEmails.includes(email);
+      
       await set(userRef, {
         name: nameEl.value.trim(),
         studentId: studentIdEl.value.trim(),
         email: emailEl.value.trim(),
         createdAt: new Date().toISOString(),
-        role: (window.ADMIN_EMAILS || '').split(',').includes(email) ? 'admin' : 'student'
+        role: isAdmin ? 'admin' : 'student'
       });
 
       alert('Account created successfully! Redirecting...');
-      window.location.href = 'index.html';
+      // Redirect admins to dashboard, students to main page
+      // Small delay to ensure database write completes
+      setTimeout(() => {
+        if (isAdmin) {
+          console.log('[Signup] Redirecting admin to dashboard');
+          window.location.href = 'dashboard/dashboard.html';
+        } else {
+          window.location.href = 'index.html';
+        }
+      }, 500);
     } catch (e) {
       console.error('Signup error:', e);
       err.textContent = e.message || 'Sign up failed. Please check all fields and try again.';

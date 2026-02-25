@@ -78,7 +78,15 @@
       const cred = await signInWithEmailAndPassword(auth, emailEl.value, passEl.value);
       const uid = cred.user?.uid;
       
-      if (await isAdmin(uid)) {
+      // Check admin status and redirect
+      const adminStatus = await isAdmin(uid);
+      console.log('[Login] Admin status:', adminStatus, 'for user:', uid, 'email:', email);
+      
+      // Small delay to ensure everything is ready
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      if (adminStatus) {
+        console.log('[Login] Redirecting admin to dashboard');
         window.location.href = 'dashboard/dashboard.html';
       } else {
         window.location.href = 'index.html';

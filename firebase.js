@@ -102,8 +102,26 @@ export async function submitBooking(bookingData) {
     throw new Error('Please fill in all required fields.');
   }
 
-  // Check if slot is already booked
   const database = await getDb();
+  
+  // Check if date is blocked
+  const blockedRef = ref(database, "blocked_periods");
+  const blockedSnap = await get(blockedRef);
+  if (blockedSnap.exists()) {
+    const blocks = blockedSnap.val();
+    const bookingDate = new Date(bookingData.date);
+    const isBlocked = Object.values(blocks).some(block => {
+      const start = new Date(block.start_date);
+      const end = new Date(block.end_date);
+      return bookingDate >= start && bookingDate <= end;
+    });
+    
+    if (isBlocked) {
+      throw new Error('This date is blocked. Please choose another date.');
+    }
+  }
+  
+  // Check if slot is already booked
   const bookingsRef = ref(database, "counseling_bookings");
   const snapshot = await get(bookingsRef);
   
@@ -164,4 +182,156 @@ export async function isAdmin(uid) {
 export async function getCurrentUser() {
   const authentication = await getAuthInstance();
   return authentication.currentUser;
+}
+
+/** Cancel a booking (admin only) */
+export async function cancelBooking(bookingId, reason = '') {
+  const authentication = await getAuthInstance();
+  if (!authentication.currentUser) {
+    throw new Error('Authentication required.');
+  }
+  
+  const isAdminUser = await isAdmin(authentication.currentUser.uid);
+  if (!isAdminUser) {
+    throw new Error('Admin privileges required.');
+  }
+  
+  const database = await getDb();
+  const bookingRef = ref(database, `counseling_bookings/${bookingId}`);
+  const bookingSnap = await get(bookingRef);
+  
+  if (!bookingSnap.exists()) {
+    throw new Error('Booking not found.');
+  }
+  
+  const booking = bookingSnap.val();
+  await set(bookingRef, {
+    ...booking,
+    status: 'cancelled',
+    cancelled_at: new Date().toISOString(),
+    cancelled_by: authentication.currentUser.uid,
+    cancellation_reason: reason
+  });
+  
+  return bookingId;
+}
+
+/** Update booking (admin only - for reschedule/modify) */
+export async function updateBooking(bookingId, updates) {
+  const authentication = await getAuthInstance();
+  if (!authentication.currentUser) {
+    throw new Error('Authentication required.');
+  }
+  
+  const isAdminUser = await isAdmin(authentication.currentUser.uid);
+  if (!isAdminUser) {
+    throw new Error('Admin privileges required.');
+  }
+  
+  const database = await getDb();
+  const bookingRef = ref(database, `counseling_bookings/${bookingId}`);
+  const bookingSnap = await get(bookingRef);
+  
+  if (!bookingSnap.exists()) {
+    throw new Error('Booking not found.');
+  }
+  
+  const booking = bookingSnap.val();
+  
+  // If changing date/time, check if new slot is available
+  if ((updates.date || updates.time) && booking.status !== 'cancelled') {
+    const newDate = updates.date || booking.date;
+    const newTime = updates.time || booking.time;
+    
+    if (newDate !== booking.date || newTime !== booking.time) {
+      const bookingsRef = ref(database, "counseling_bookings");
+      const snapshot = await get(bookingsRef);
+      
+      if (snapshot.exists()) {
+        const bookings = snapshot.val();
+        const isBooked = Object.entries(bookings).some(([key, b]) => 
+          key !== bookingId &&
+          b.date === newDate && 
+          b.time === newTime &&
+          b.status !== 'cancelled'
+        );
+        
+        if (isBooked) {
+          throw new Error('The new time slot is already booked.');
+        }
+      }
+    }
+  }
+  
+  await set(bookingRef, {
+    ...booking,
+    ...updates,
+    updated_at: new Date().toISOString(),
+    updated_by: authentication.currentUser.uid
+  });
+  
+  return bookingId;
+}
+
+/** Fetch blocked periods in real-time */
+export async function fetchBlockedPeriodsRealtime(callback) {
+  const database = await getDb();
+  const blockedRef = ref(database, "blocked_periods");
+  
+  onValue(blockedRef, (snapshot) => {
+    const blockedPeriods = [];
+    snapshot.forEach((childSnap) => {
+      blockedPeriods.push({ ...childSnap.val(), key: childSnap.key });
+    });
+    callback(blockedPeriods);
+  });
+}
+
+/** Add blocked period (admin only) */
+export async function addBlockedPeriod(blockData) {
+  const authentication = await getAuthInstance();
+  if (!authentication.currentUser) {
+    throw new Error('Authentication required.');
+  }
+  
+  const isAdminUser = await isAdmin(authentication.currentUser.uid);
+  if (!isAdminUser) {
+    throw new Error('Admin privileges required.');
+  }
+  
+  if (!blockData.start_date || !blockData.end_date || !blockData.reason) {
+    throw new Error('Start date, end date, and reason are required.');
+  }
+  
+  const database = await getDb();
+  const blockedRef = ref(database, "blocked_periods");
+  const newBlockRef = push(blockedRef);
+  
+  const finalBlockData = {
+    ...blockData,
+    created_by: authentication.currentUser.uid,
+    created_at: new Date().toISOString()
+  };
+  
+  await set(newBlockRef, finalBlockData);
+  return newBlockRef.key;
+}
+
+/** Remove blocked period (admin only) */
+export async function removeBlockedPeriod(blockId) {
+  const authentication = await getAuthInstance();
+  if (!authentication.currentUser) {
+    throw new Error('Authentication required.');
+  }
+  
+  const isAdminUser = await isAdmin(authentication.currentUser.uid);
+  if (!isAdminUser) {
+    throw new Error('Admin privileges required.');
+  }
+  
+  const database = await getDb();
+  const blockRef = ref(database, `blocked_periods/${blockId}`);
+  await set(blockRef, null);
+  
+  return blockId;
 }

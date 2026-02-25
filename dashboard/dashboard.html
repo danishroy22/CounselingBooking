@@ -53,9 +53,63 @@
   <div class="legend">
     <span><span class="status-indicator status-available"></span>Available</span>
     <span><span class="status-indicator status-booked"></span>Booked</span>
+    <span><span class="status-indicator status-blocked"></span>Blocked</span>
+    <span><span class="status-indicator status-cancelled"></span>Cancelled</span>
   </div>
 
-  <div class="calendar" id="dashboardCalendar"></div>
+  <div class="dashboard-tabs">
+    <button class="tab-btn active" data-tab="calendar">Calendar</button>
+    <button class="tab-btn" data-tab="analytics">Analytics</button>
+    <button class="tab-btn" data-tab="blocked">Block Periods</button>
+  </div>
+
+  <div class="tab-content active" id="calendarTab">
+    <div class="calendar" id="dashboardCalendar"></div>
+  </div>
+
+  <div class="tab-content" id="analyticsTab">
+    <div class="analytics-container">
+      <div class="analytics-section">
+        <h3>Weekly Statistics</h3>
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <div class="analytics-label">This Week</div>
+            <div class="analytics-value" id="weekBookings">0</div>
+            <div class="analytics-sub">Bookings</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-label">This Month</div>
+            <div class="analytics-value" id="monthBookings">0</div>
+            <div class="analytics-sub">Bookings</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-label">Cancellation Rate</div>
+            <div class="analytics-value" id="cancelRate">0%</div>
+            <div class="analytics-sub">Last 30 days</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-label">Avg. per Day</div>
+            <div class="analytics-value" id="avgPerDay">0</div>
+            <div class="analytics-sub">This week</div>
+          </div>
+        </div>
+      </div>
+      <div class="analytics-section">
+        <h3>Recent Activity</h3>
+        <div id="recentActivity" class="activity-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="blockedTab">
+    <div class="blocked-periods-container">
+      <div class="section-header">
+        <h3>Blocked Periods</h3>
+        <button class="btn-primary" id="addBlockBtn">+ Add Block Period</button>
+      </div>
+      <div id="blockedPeriodsList" class="blocked-list"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Booking Details Modal -->
@@ -64,6 +118,66 @@
     <span class="close" id="closeModal">&times;</span>
     <h2>Booking Details</h2>
     <div id="bookingDetails"></div>
+  </div>
+</div>
+
+<!-- Reschedule/Modify Modal -->
+<div class="modal" id="rescheduleModal">
+  <div class="modal-content">
+    <span class="close" id="closeRescheduleModal">&times;</span>
+    <h2>Reschedule Booking</h2>
+    <form id="rescheduleForm">
+      <input type="hidden" id="rescheduleBookingId">
+      <div class="form-group">
+        <label for="rescheduleDate">New Date *</label>
+        <input type="date" id="rescheduleDate" required>
+      </div>
+      <div class="form-group">
+        <label for="rescheduleTime">New Time *</label>
+        <select id="rescheduleTime" required>
+          <option value="">Select time</option>
+          <option value="10:00 – 11:00">10:00 – 11:00</option>
+          <option value="11:30 – 12:00">11:30 – 12:00</option>
+          <option value="11:30 – 12:30">11:30 – 12:30</option>
+          <option value="13:00 – 14:00">13:00 – 14:00</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="rescheduleReason">Reason for Reschedule</label>
+        <textarea id="rescheduleReason" rows="3" placeholder="Optional reason for rescheduling"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Update Booking</button>
+        <button type="button" class="btn-secondary" id="cancelReschedule">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Block Period Modal -->
+<div class="modal" id="blockPeriodModal">
+  <div class="modal-content">
+    <span class="close" id="closeBlockModal">&times;</span>
+    <h2 id="blockModalTitle">Add Block Period</h2>
+    <form id="blockPeriodForm">
+      <input type="hidden" id="blockPeriodId">
+      <div class="form-group">
+        <label for="blockStartDate">Start Date *</label>
+        <input type="date" id="blockStartDate" required>
+      </div>
+      <div class="form-group">
+        <label for="blockEndDate">End Date *</label>
+        <input type="date" id="blockEndDate" required>
+      </div>
+      <div class="form-group">
+        <label for="blockReason">Reason *</label>
+        <input type="text" id="blockReason" required placeholder="e.g., Public Holiday, Staff Leave, Institutional Closure">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" id="submitBlockBtn">Add Block Period</button>
+        <button type="button" class="btn-secondary" id="cancelBlock">Cancel</button>
+      </div>
+    </form>
   </div>
 </div>
 

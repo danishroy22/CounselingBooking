@@ -1,5 +1,12 @@
 // script.js - Simplified counseling booking logic
-import { fetchBookingsRealtime, submitBooking, onAuthStateChanged, getAuthInstance, isAdmin } from "./firebase.js";
+import { 
+  fetchBookingsRealtime, 
+  submitBooking, 
+  onAuthStateChanged, 
+  getAuthInstance, 
+  isAdmin,
+  fetchBlockedPeriodsRealtime
+} from "./firebase.js";
 
 // Available time slots for counseling sessions by day
 // Day: 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
@@ -17,8 +24,19 @@ const timeSlotsByDay = {
 };
 
 let bookedSlots = {}; // { "YYYY-MM-DD": [ {time, student_name, ...}, ... ] }
+let blockedPeriods = [];
 let startDate = new Date();
 let currentUser = null;
+
+// Check if date is blocked
+function isDateBlocked(dateStr) {
+  const date = new Date(dateStr);
+  return blockedPeriods.some(block => {
+    const start = new Date(block.start_date);
+    const end = new Date(block.end_date);
+    return date >= start && date <= end;
+  });
+}
 
 // Calendar generation - only show days with available slots
 function generateCalendar(start) {
@@ -76,13 +94,23 @@ function generateCalendar(start) {
               `<div class="slot-owner">Your booking</div>` : ''}
           `;
         } else {
-          slotDiv.className = "slot available";
-          slotDiv.onclick = () => openBookingModal(dateStr, slotTime);
-          slotDiv.innerHTML = `
-            <div class="slot-time">${slotTime}</div>
-            <div class="slot-status">Available</div>
-            <div class="slot-action">Click to book</div>
-          `;
+          // Check if date is blocked
+          const isBlocked = isDateBlocked(dateStr);
+          if (isBlocked) {
+            slotDiv.className = "slot blocked";
+            slotDiv.innerHTML = `
+              <div class="slot-time">${slotTime}</div>
+              <div class="slot-status">Blocked</div>
+            `;
+          } else {
+            slotDiv.className = "slot available";
+            slotDiv.onclick = () => openBookingModal(dateStr, slotTime);
+            slotDiv.innerHTML = `
+              <div class="slot-time">${slotTime}</div>
+              <div class="slot-status">Available</div>
+              <div class="slot-action">Click to book</div>
+            `;
+          }
         }
         
         dayDiv.appendChild(slotDiv);
@@ -117,7 +145,7 @@ function openBookingModal(date, time) {
     <p><strong>Time:</strong> ${time}</p>
   `;
 
-  modal.style.display = "block";
+  modal.style.display = "flex";
 }
 
 // Close booking modal
@@ -145,6 +173,12 @@ async function handleBookingSubmit(e) {
 
   if (!studentName || !studentId) {
     alert("Please fill in all required fields");
+    return;
+  }
+
+  // Check if date is blocked
+  if (isDateBlocked(date)) {
+    alert("This date is blocked. Please select another date.");
     return;
   }
 
@@ -243,8 +277,41 @@ async function init() {
     generateCalendar(startDate);
   });
 
+  // Fetch blocked periods in real-time
+  fetchBlockedPeriodsRealtime((periods) => {
+    blockedPeriods = periods;
+    generateCalendar(startDate);
+  });
+
   // Initial calendar generation
   generateCalendar(startDate);
+
+  // Initialize info tabs
+  initInfoTabs();
+}
+
+// Info tabs functionality
+function initInfoTabs() {
+  const tabBtns = document.querySelectorAll('.info-tab-btn');
+  const sections = document.querySelectorAll('.info-section');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.infoTab;
+      
+      // Update buttons
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Update sections
+      sections.forEach(section => {
+        section.classList.remove('active');
+        if (section.id === targetTab + 'Section') {
+          section.classList.add('active');
+        }
+      });
+    });
+  });
 }
 
 // Start the app

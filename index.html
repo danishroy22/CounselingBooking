@@ -54,26 +54,204 @@
 </div>
 
 <div class="container" id="info">
-  <div class="rules-card">
-    <div class="rules-header">
-      <h3>About Counseling Sessions</h3>
-    </div>
-    <div class="rules-content">
-      <h4>How to Book a Session</h4>
-      <ul>
-        <li>Browse available time slots for Tuesday or Friday</li>
-        <li>Click on an available slot to book your session</li>
-        <li>Complete the booking form with your details</li>
-        <li>Your booking will be confirmed immediately</li>
-      </ul>
+  <div class="info-tabs">
+    <button class="info-tab-btn active" data-info-tab="about">About</button>
+    <button class="info-tab-btn" data-info-tab="contact">Contact</button>
+    <button class="info-tab-btn" data-info-tab="terms">Terms of Use</button>
+    <button class="info-tab-btn" data-info-tab="rules">Rules & Regulations</button>
+    <button class="info-tab-btn" data-info-tab="ethics">Code of Ethics</button>
+  </div>
 
-      <h4>Session Information</h4>
-      <ul>
-        <li>Sessions are available on Tuesdays and Fridays</li>
-        <li>Each session duration varies by time slot</li>
-        <li>To cancel or reschedule, please contact the counseling office</li>
-        <li>All information shared is kept strictly confidential</li>
-      </ul>
+  <div class="info-content">
+    <!-- About Section -->
+    <div class="info-section active" id="aboutSection">
+      <div class="rules-card">
+        <div class="rules-header">
+          <h3>About Counseling Sessions</h3>
+        </div>
+        <div class="rules-content">
+          <h4>How to Book a Session</h4>
+          <ul>
+            <li>Browse available time slots for Tuesday or Friday</li>
+            <li>Click on an available slot to book your session</li>
+            <li>Complete the booking form with your details</li>
+            <li>Your booking will be confirmed immediately</li>
+          </ul>
+
+          <h4>Session Information</h4>
+          <ul>
+            <li>Sessions are available on Tuesdays and Fridays</li>
+            <li>Each session duration varies by time slot</li>
+            <li>To cancel or reschedule, please contact the counseling office</li>
+            <li>All information shared is kept strictly confidential</li>
+          </ul>
+
+          <h4>Our Services</h4>
+          <p>The Counseling Service at the University of Mauritius, in collaboration with the Psychology Society, Student Union, and Befrienders, provides professional psychological support to students. Our team of qualified counselors offers a safe, confidential, and non-judgmental environment for students to discuss their concerns.</p>
+
+          <h4>Partnership</h4>
+          <p>This service is a collaborative effort between the University of Mauritius, Psychology Society, Student Union, and Befrienders Mauritius, working together to support student mental health and wellbeing.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="info-section" id="contactSection">
+      <div class="rules-card">
+        <div class="rules-header">
+          <h3>Contact Information</h3>
+        </div>
+        <div class="rules-content">
+          <h4>Counseling Office</h4>
+          <p><strong>Location:</strong> University of Mauritius, Reduit, Mauritius</p>
+          <p><strong>Email:</strong> counseling@uom.ac.mu</p>
+          <p><strong>Phone:</strong> +230 403 7400</p>
+          <p><strong>Office Hours:</strong> Monday to Friday, 9:00 AM - 4:00 PM</p>
+
+          <h4>Emergency Contacts</h4>
+          <p><strong>Befrienders Mauritius:</strong> +230 8000 3333 (24/7)</p>
+          <p><strong>Emergency Services:</strong> 114</p>
+
+          <h4>Student Support Services</h4>
+          <p><strong>Psychology Society:</strong> psychsoc@uom.ac.mu</p>
+          <p><strong>Student Union:</strong> su@uom.ac.mu</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terms of Use Section -->
+    <div class="info-section" id="termsSection">
+      <div class="rules-card">
+        <div class="rules-header">
+          <h3>Terms of Use</h3>
+        </div>
+        <div class="rules-content">
+          <h4>Acceptance of Terms</h4>
+          <p>By using this counseling booking system, you agree to comply with and be bound by these terms of use. If you do not agree, please do not use this service.</p>
+
+          <h4>Eligibility</h4>
+          <ul>
+            <li>This service is exclusively for registered students of the University of Mauritius</li>
+            <li>You must use your official UoM email address (@umail.uom.ac.mu) to register</li>
+            <li>You must provide accurate and truthful information when booking</li>
+          </ul>
+
+          <h4>Booking Policy</h4>
+          <ul>
+            <li>Bookings are subject to availability</li>
+            <li>You may book one session at a time</li>
+            <li>Cancellations must be made at least 24 hours in advance</li>
+            <li>Repeated no-shows may result in restricted access</li>
+          </ul>
+
+          <h4>User Responsibilities</h4>
+          <ul>
+            <li>Maintain the confidentiality of your login credentials</li>
+            <li>Use the system only for legitimate booking purposes</li>
+            <li>Respect the privacy of other users</li>
+            <li>Report any technical issues or concerns immediately</li>
+          </ul>
+
+          <h4>Limitation of Liability</h4>
+          <p>The University of Mauritius and its partners are not liable for any technical issues, system downtime, or data loss that may occur while using this booking system.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rules & Regulations Section -->
+    <div class="info-section" id="rulesSection">
+      <div class="rules-card">
+        <div class="rules-header">
+          <h3>Rules & Regulations</h3>
+        </div>
+        <div class="rules-content">
+          <h4>Booking Rules</h4>
+          <ul>
+            <li>Sessions are available on Tuesdays and Fridays only</li>
+            <li>Time slots cannot be changed once booked without admin approval</li>
+            <li>Students must arrive on time for their scheduled sessions</li>
+            <li>Late arrivals may result in shortened session time</li>
+          </ul>
+
+          <h4>Cancellation Policy</h4>
+          <ul>
+            <li>Cancellations must be made at least 24 hours before the scheduled session</li>
+            <li>To cancel, contact the counseling office via email or phone</li>
+            <li>Emergency cancellations will be considered on a case-by-case basis</li>
+            <li>Repeated last-minute cancellations may result in booking restrictions</li>
+          </ul>
+
+          <h4>Rescheduling Policy</h4>
+          <ul>
+            <li>Rescheduling requests must be made at least 48 hours in advance</li>
+            <li>Rescheduling is subject to availability</li>
+            <li>Students may reschedule a maximum of twice per booking</li>
+            <li>Contact the counseling office for rescheduling requests</li>
+          </ul>
+
+          <h4>Code of Conduct</h4>
+          <ul>
+            <li>Respectful behavior is required at all times</li>
+            <li>Abusive or inappropriate conduct will result in immediate termination of services</li>
+            <li>Students must provide accurate information during booking</li>
+            <li>Misuse of the booking system is strictly prohibited</li>
+          </ul>
+
+          <h4>Data Protection</h4>
+          <ul>
+            <li>All personal information is handled in accordance with data protection laws</li>
+            <li>Booking information is stored securely and confidentially</li>
+            <li>Information is only accessible to authorized personnel</li>
+            <li>Students have the right to access and correct their personal data</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code of Ethics Section -->
+    <div class="info-section" id="ethicsSection">
+      <div class="rules-card">
+        <div class="rules-header">
+          <h3>Code of Ethics</h3>
+        </div>
+        <div class="rules-content">
+          <h4>Confidentiality</h4>
+          <p>All counseling sessions are strictly confidential. Information shared during sessions will not be disclosed to third parties without explicit consent, except in cases where there is a risk of harm to self or others, or as required by law.</p>
+
+          <h4>Professional Standards</h4>
+          <ul>
+            <li>Counselors adhere to professional ethical guidelines</li>
+            <li>Services are provided by qualified and trained professionals</li>
+            <li>Continuous professional development is maintained</li>
+            <li>Supervision and peer support are integral to service delivery</li>
+          </ul>
+
+          <h4>Respect and Dignity</h4>
+          <ul>
+            <li>All students are treated with respect and dignity</li>
+            <li>Services are provided without discrimination</li>
+            <li>Cultural sensitivity is maintained</li>
+            <li>Individual differences are respected and valued</li>
+          </ul>
+
+          <h4>Informed Consent</h4>
+          <p>Students are informed about the nature of counseling services, their rights, and the limits of confidentiality before beginning sessions. Participation is voluntary, and students may withdraw at any time.</p>
+
+          <h4>Boundaries</h4>
+          <ul>
+            <li>Professional boundaries are maintained at all times</li>
+            <li>Dual relationships are avoided</li>
+            <li>Counselors do not engage in personal relationships with students</li>
+            <li>Gifts and favors are not accepted</li>
+          </ul>
+
+          <h4>Competence</h4>
+          <p>Counselors only provide services within their areas of competence and training. When specialized services are needed, appropriate referrals are made to qualified professionals.</p>
+
+          <h4>Reporting Concerns</h4>
+          <p>If you have concerns about the conduct of a counselor or the quality of services, please contact the counseling office or the University administration. All concerns will be taken seriously and investigated appropriately.</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
